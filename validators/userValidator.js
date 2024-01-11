@@ -5,7 +5,7 @@ exports.registerValidator = [
         .isEmail().withMessage('Invalid email')
         .normalizeEmail(),
     body('password')
-        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+        .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
 ];
 
 exports.loginValidator = [
@@ -13,5 +13,5 @@ exports.loginValidator = [
         .isEmail().withMessage('Invalid email')
         .normalizeEmail(),
     body('password')
-        .isLength({ min: 6 }).withMessage('Invalid password')
+        .isLength({ min: 8 }).withMessage('Invalid password')
 ];

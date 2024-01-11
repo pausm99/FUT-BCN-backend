@@ -5,6 +5,10 @@ const User = require('../models/user');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 class UserController {
+    static async secret(req, res) {
+        res.status(201).json({ message: 'Found' });
+    }
+
     static async register(req, res) {
 
         //Input validation
@@ -17,7 +21,7 @@ class UserController {
 
         try {
             const existingUser = await User.getUserByEmail(email);
-            console.log('Duplicated user', existingUser);
+            console.log('Duplicated user:', existingUser);
             if (existingUser) {
                 return res.status(400).json({ error: 'User already exists' });
             }
@@ -67,7 +71,7 @@ class UserController {
             });
 
             // Respond with token
-            res.status(200).json({ message: 'User logged successfully' }).header('Authorization', `Bearer ${token}`);
+            res.status(200).header('Authorization', `Bearer ${token}`).json({ message: 'User logged successfully' });
 
         } catch (err) {
             console.log(err);
@@ -86,11 +90,11 @@ class UserController {
 
         try {
             const user = await User.getUserByEmail(email);
-            if (!user) {
-                return res.status(200).json({ message: 'User not found, email available' });
-            } else {
-                return res.status(400).json({ error: 'User found, email duplicated' });
-            }
+            if (user) {
+                return res.json({ isDuplicated: true });
+              } else {
+                return res.json({ isDuplicated: false });
+              }
         } catch (error) {
             console.log(error);
             res.status(500).json({  error: 'Server Error' });

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { SECRET_KEY } = require('../config');
+const SECRET_KEY = process.env.SECRET_KEY;
 
 function authenticateToken(req, res, next) {
     const token = req.header('Authorization')?.split(' ')[1];
@@ -10,7 +10,7 @@ function authenticateToken(req, res, next) {
 
     jwt.verify(token, SECRET_KEY, (err, user) => {
         if (err) {
-            return res.status(403).json({ error: 'Invalid token' });
+            return res.status(403).json({ error: 'Invalid token, forbidden access' });
         }
 
         req.user = user;
@@ -18,4 +18,4 @@ function authenticateToken(req, res, next) {
     });
 }
 
-module.exports = authenticateToken;
+module.exports = { authenticateToken };
