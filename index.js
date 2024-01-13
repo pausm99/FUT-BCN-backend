@@ -1,11 +1,16 @@
 const express = require('express');
 const userRoutes = require('./routes/userRoutes');
 const secretRoutes = require('./routes/secretRoutes');
-const app = express();
 const cors = require('cors');
+const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:4200',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    exposedHeaders: ['Authorization']
+}));
 
 app.use('/user', userRoutes);
 app.use('/secret', secretRoutes);
