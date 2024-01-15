@@ -5,9 +5,6 @@ const User = require('../models/user');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 class UserController {
-    static async secret(req, res) {
-        res.status(201).json({ message: 'Found' });
-    }
 
     static async register(req, res) {
 
