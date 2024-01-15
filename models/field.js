@@ -2,8 +2,9 @@ const db = require("../config/db");
 
 class Field {
   
-  constructor(company_id, type, location_lat, location_lng, address, is_public, width, length, opening_time, closing_time) {
+  constructor(company_id, name, type, location_lat, location_lng, address, is_public, width, length, opening_time, closing_time) {
     this.company_id = company_id;
+    this.name = name;
     this.type = type;
     this.location_lat = location_lat;
     this.location_lng = location_lng;
@@ -15,11 +16,11 @@ class Field {
     this.closing_time = closing_time;
   }
 
-  static async createField(company_id, type, location_lat, location_lng, address, is_public, width, length, opening_time, closing_time) {
+  static async createField(company_id, name, type, location_lat, location_lng, address, is_public, width, length, opening_time, closing_time) {
     try {
       let sql = `
-      INSERT INTO football_fields (company_id, type, location_lat, location_lng, address, public, width, length, opening_time, closing_time)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      INSERT INTO football_fields (company_id, name, type, location_lat, location_lng, address, public, width, length, opening_time, closing_time)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `;
 
       const [result] = await db.execute(sql, [
