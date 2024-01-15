@@ -9,7 +9,6 @@ class FieldController {
             fields.forEach(field => {
                 field.public = field.public === 1 ? true : false;
               });
-                          console.log(fields);
             res.status(200).json(fields);
         } catch (error) {
             console.log(error);
