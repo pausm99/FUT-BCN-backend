@@ -56,6 +56,8 @@ class UserController {
                 return res.status(401).json({ error: 'Invalid credentials' });
             }
 
+            const { id, name, role, position, age, bank_account } = user;
+
             // Check if the password matches
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
@@ -68,7 +70,7 @@ class UserController {
             });
 
             // Respond with token
-            res.status(200).header('Authorization', `Bearer ${token}`).json({ message: 'User logged successfully' });
+            res.status(200).header('Authorization', `Bearer ${token}`).json({ id, email, name, role, position, age, bank_account });
 
         } catch (err) {
             console.log(err);
