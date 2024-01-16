@@ -14,7 +14,7 @@ class UserController {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { email, password, name, position, age, bank_account } = req.body;
+        const { email, password, name, type, position, age, bank_account } = req.body;
 
         try {
             const existingUser = await User.getUserByEmail(email);
@@ -28,7 +28,7 @@ class UserController {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             // Create new user
-            const userId = await User.createUser(email, hashedPassword, name, position, age, bank_account);
+            const userId = await User.createUser(email, hashedPassword, name, type, position, age, bank_account);
 
             // Respond with success
             res.status(201).json({ message: 'User registered successfully', userId });
