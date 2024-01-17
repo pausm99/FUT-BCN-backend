@@ -19,9 +19,8 @@ class FieldController {
     static async createField(req, res) {
         try {
             let field = req.body;
-            console.log(field);
-            const createdField = await Field.createField(field);
-            console.log(createdField);
+            const fieldId = await Field.createField(field);
+            const createdField = {id: fieldId, ...field};
             res.status(200).json(createdField);
             
         } catch (error) {

@@ -38,9 +38,10 @@ class Field {
         field.closing_time || null
       ]);
 
-      return result[0];
+      return result.insertId;
 
     } catch (error) {
+      console.log(error)
       throw error;
     }
   }
