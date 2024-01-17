@@ -16,22 +16,14 @@ class FieldController {
         }
     }
 
-    static async getFieldByEmail(req, res) {
-        //Input validation
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        let email = req.params.email;
-
+    static async createField(req, res) {
         try {
-            const field = await Field.getFieldByEmail(email);
-            if (field) {
-                return res.json({ isDuplicated: true });
-              } else {
-                return res.json({ isDuplicated: false });
-              }
+            let field = req.body;
+            console.log(field);
+            const createdField = await Field.createField(field);
+            console.log(createdField);
+            res.status(200).json(createdField);
+            
         } catch (error) {
             console.log(error);
             res.status(500).json({  error: 'Server Error' });

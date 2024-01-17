@@ -16,7 +16,8 @@ class Field {
     this.closing_time = closing_time;
   }
 
-  static async createField(company_id, name, type, location_lat, location_lng, address, is_public, width, length, opening_time, closing_time) {
+  static async createField(field) {
+
     try {
       let sql = `
       INSERT INTO football_fields (company_id, name, type, location_lat, location_lng, address, public, width, length, opening_time, closing_time)
@@ -24,19 +25,20 @@ class Field {
       `;
 
       const [result] = await db.execute(sql, [
-        company_id || null, 
-        type,
-        location_lat,
-        location_lng,
-        address,
-        is_public,
-        width,
-        length,
-        opening_time || null,
-        closing_time || null
+        field.company_id || null, 
+        field.name,
+        field.type,
+        field.location_lat,
+        field.location_lng,
+        field.address,
+        field.public,
+        field.width,
+        field.length,
+        field.opening_time || null,
+        field.closing_time || null
       ]);
 
-      return result.insertId;
+      return result[0];
 
     } catch (error) {
       throw error;

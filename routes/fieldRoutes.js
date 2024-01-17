@@ -4,6 +4,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.route('/').get(authMiddleware.authenticateToken, fieldController.getAllFields);
+router.route('/')
+    .get(authMiddleware.authenticateToken, fieldController.getAllFields)
+    .post(authMiddleware.authenticateToken, fieldController.createField);
 
 module.exports = router;
