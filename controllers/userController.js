@@ -14,7 +14,7 @@ class UserController {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { email, password, name, type, position, age, bank_account } = req.body;
+        const { email, password, name, role, position, age, bank_account } = req.body;
 
         try {
             const existingUser = await User.getUserByEmail(email);
@@ -28,7 +28,7 @@ class UserController {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             // Create new user
-            const userId = await User.createUser(email, hashedPassword, name, type, position, age, bank_account);
+            const userId = await User.createUser(email, hashedPassword, name, role, position, age, bank_account);
 
             // Respond with success
             res.status(201).json({ message: 'User registered successfully', userId });
@@ -64,13 +64,16 @@ class UserController {
                 return res.status(401).json({ error: 'Invalid credentials' });
             }
 
+            const userSimple = { email, name, role };
+            
+
             // Generate acces token
-            const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+            const token = jwt.sign({ userSimple }, SECRET_KEY, {
                 expiresIn: '1d',
             });
 
             // Respond with token
-            res.status(200).header('Authorization', `Bearer ${token}`).json({ id, email, name, role, position, age, bank_account });
+            res.status(200).header('Authorization', `Bearer ${token}`).json({ message: 'User logged successfully'});
 
         } catch (err) {
             console.log(err);
