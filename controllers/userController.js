@@ -64,7 +64,7 @@ class UserController {
                 return res.status(401).json({ error: 'Invalid credentials' });
             }
 
-            const userSimple = { email, name, role };
+            const userSimple = { id, email, name, role };
             
 
             // Generate acces token
