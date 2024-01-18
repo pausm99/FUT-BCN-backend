@@ -77,6 +77,22 @@ class Field {
       throw error;
     }
   }
+
+  static async getCompanyFields(company_id) {
+    try {
+      
+      let sql = `
+      SELECT * FROM football_fields
+      WHERE company_id = ?;
+      `
+
+      const [result] = await db.execute(sql, [company_id]);
+
+      return result;
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 module.exports = Field;
