@@ -48,11 +48,30 @@ class FieldController {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        let company_id = req.params.company_id;
+        const company_id = req.query.company_id;
 
         try {
             const fields = await Field.getCompanyFields(company_id);
             res.status(200).json(fields);
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
+
+    static async getFieldById(req, res) {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const id = req.params.id;
+
+        try {
+            const field = await Field.getFieldById(id);
+            res.status(200).json(field);
             
         } catch (error) {
             console.log(error);

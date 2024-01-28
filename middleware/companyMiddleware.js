@@ -14,7 +14,7 @@ function authenticateCompanyToken(req, res, next) {
         }
 
         const token_company_id = user.userSimple.id;
-        const req_company_id = req.params.company_id;
+        const req_company_id = req.query.company_id;
         
         if (token_company_id != req_company_id) {
             return res.status(403).json({ message: 'Forbbiden acces' });

@@ -65,13 +65,13 @@ class Field {
     try {
       
       let sql = `
-      SELECT * FROM fields
+      SELECT * FROM football_fields
       WHERE id = ?;
       `;
 
       const [result] = await db.execute(sql, [id]);
 
-      return result.length > 0 ? result[0] : null;
+      return result[0];
 
     } catch (error) {
       throw error;

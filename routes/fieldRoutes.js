@@ -9,6 +9,8 @@ router.route('/')
     .get(authMiddleware.authenticateToken, fieldController.getAllFields)
     .post(authMiddleware.authenticateToken, fieldController.createField);
 
-router.route('/:company_id').get(authMiddleware.authenticateToken, companyMiddleware.authenticateCompanyToken, fieldController.getCompanyFields);
+router.route('/byCompany').get(authMiddleware.authenticateToken, companyMiddleware.authenticateCompanyToken, fieldController.getCompanyFields);
+
+router.route('/:id').get(authMiddleware.authenticateToken, fieldController.getFieldById);
 
 module.exports = router;
