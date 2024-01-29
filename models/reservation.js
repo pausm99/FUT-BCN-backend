@@ -98,6 +98,23 @@ class Reservation {
       throw error;
     }
   }
+
+  static async getReservationsByFieldId(field_id) {
+    try {
+
+      let sql = `
+      SELECT * from reservations
+      WHERE field_id = ?;
+      `;
+
+      const [result] = await db.execute(sql, [field_id]);
+
+      return result[0];
+
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = Reservation;

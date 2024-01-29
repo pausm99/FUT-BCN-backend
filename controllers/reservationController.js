@@ -99,6 +99,24 @@ class ReservationController {
         }
 
     }
+
+    static async getReservationsByFieldId(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const fieldId = req.params.id;
+
+        try {
+            const reservations = await Reservation.getReservationsByFieldId(fieldId);
+            res.status(200).json(reservations);
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
 }
 
 module.exports = ReservationController;
