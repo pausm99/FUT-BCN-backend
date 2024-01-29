@@ -94,9 +94,32 @@ class UserController {
             const user = await User.getUserByEmail(email);
             if (user) {
                 return res.json({ isDuplicated: true });
-              } else {
+            } 
+            else {
                 return res.json({ isDuplicated: false });
-              }
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
+
+    static async getUserById(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        let id = req.params.id;
+
+        try {
+            const user = await User.getUserById(id);
+            if (user) {
+                return res.status(200).json(user)
+            }
+            else {
+                return res.status(404).json({ error: 'User not found' });
+            }
         } catch (error) {
             console.log(error);
             res.status(500).json({  error: 'Server Error' });
