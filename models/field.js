@@ -105,7 +105,7 @@ class Field {
       return db.execute(sql, [id]);
 
     } catch (error) {
-      
+      throw error;
     }
   }
 }
