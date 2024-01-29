@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoutes = require('./routes/userRoutes');
-const secretRoutes = require('./routes/fieldRoutes');
+const fieldRoutes = require('./routes/fieldRoutes');
+const reservationRoutes = require('./routes/reservationRoutes.js');
 const cors = require('cors');
 const app = express();
 
@@ -13,7 +14,8 @@ app.use(cors({
 }));
 
 app.use('/user', userRoutes);
-app.use('/fields', secretRoutes);
+app.use('/fields', fieldRoutes);
+app.use('/reservations', reservationRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
