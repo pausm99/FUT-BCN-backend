@@ -93,6 +93,21 @@ class Field {
       throw error
     }
   }
+
+  static async deleteFieldById(id) {
+    try {
+
+      let sql = `
+      DELETE from football_fields
+      WHERE id = ?;
+      `;
+
+      return db.execute(sql, [id]);
+
+    } catch (error) {
+      
+    }
+  }
 }
 
 module.exports = Field;

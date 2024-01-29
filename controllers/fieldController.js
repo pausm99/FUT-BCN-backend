@@ -78,6 +78,27 @@ class FieldController {
             res.status(500).json({  error: 'Server Error' });
         }
     }
+
+    static async deleteFieldById(req, res) {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const id = req.params.id;
+
+        try {
+
+            await Field.deleteFieldById(id);
+            res.status(200).json( {message: "Field deleted successfully"} );
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: "Can't delete field" });
+        }
+
+    }
 }
 
 module.exports = FieldController;

@@ -13,4 +13,6 @@ router.route('/byCompany').get(authMiddleware.authenticateToken, companyMiddlewa
 
 router.route('/:id').get(authMiddleware.authenticateToken, fieldController.getFieldById);
 
+router.route('/:id').delete(authMiddleware.authenticateToken, companyMiddleware.authenticateCompanyTokenWhenDeleteField, fieldController.deleteFieldById);
+
 module.exports = router;
