@@ -14,7 +14,9 @@ class FieldController {
             let fields = await Field.getAllFields();
             fields.forEach(field => {
                 field.public = field.public === 1 ? true : false;
-              });
+                field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+                field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            });
             res.status(200).json(fields);
         } catch (error) {
             console.log(error);
@@ -31,6 +33,10 @@ class FieldController {
 
         try {
             let field = req.body;
+
+            field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+
             const fieldId = await Field.createField(field);
             const createdField = {id: fieldId, ...field};
             res.status(200).json(createdField);
@@ -52,6 +58,12 @@ class FieldController {
 
         try {
             const fields = await Field.getCompanyFields(company_id);
+
+            fields.map(field => {
+                field.date_time_start = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+                field.date_time_end = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            });
+
             res.status(200).json(fields);
             
         } catch (error) {
@@ -71,6 +83,10 @@ class FieldController {
 
         try {
             const field = await Field.getFieldById(id);
+
+            field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+
             res.status(200).json(field);
             
         } catch (error) {

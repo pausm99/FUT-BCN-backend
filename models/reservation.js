@@ -109,7 +109,7 @@ class Reservation {
 
       const [result] = await db.execute(sql, [field_id]);
 
-      return result[0];
+      return result;
 
     } catch (error) {
       throw error;
