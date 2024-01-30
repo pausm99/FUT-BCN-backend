@@ -110,7 +110,7 @@ class ReservationController {
 
         try {
             const reservations = await Reservation.getReservationsByFieldId(fieldId);
-            res.status(200).json(reservations);
+            res.status(200).json([reservations]);
             
         } catch (error) {
             console.log(error);
