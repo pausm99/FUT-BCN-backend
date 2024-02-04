@@ -1,7 +1,17 @@
 const { validationResult } = require('express-validator');
 const Reservation = require('../models/reservation.js');
+const moment = require('moment-timezone');
+
 
 class ReservationController {
+
+    static transformToUTC(date) {
+        return new Date(moment.utc(date));
+    }
+
+    static getFormattedDates(date) {
+        return moment.tz(date, 'Europe/Madrid').format();
+    }
 
 
     static async createReservation(req, res) {
@@ -14,8 +24,8 @@ class ReservationController {
         try {
             let reservation = req.body;
 
-            reservation.date_time_start = reservation.date_time_start.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-            reservation.date_time_end = reservation.date_time_end.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            reservation.date_time_start = ReservationController.transformToUTC(reservation.date_time_start);
+            reservation.date_time_end = ReservationController.transformToUTC(reservation.date_time_end);
 
             const reservationId = await Reservation.createReservation(reservation);
             const createdReservation = {id: reservationId, ...reservation};
@@ -40,8 +50,8 @@ class ReservationController {
         try {
             const reservation = await Reservation.getReservationById(id);
 
-            reservation.date_time_start = reservation.date_time_start.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-            reservation.date_time_end = reservation.date_time_end.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            reservation.date_time_start = ReservationController.getFormattedDates(reservation.date_time_start);
+            reservation.date_time_end = ReservationController.getFormattedDates(reservation.date_time_end);
 
             res.status(200).json(reservation);
             
@@ -84,11 +94,11 @@ class ReservationController {
             const reservations = await Reservation.getReservationsByFieldId(fieldId);
 
             reservations.map(reservation => {
-                reservation.date_time_start = reservation.date_time_start.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-                reservation.date_time_end = reservation.date_time_end.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+                reservation.date_time_start = ReservationController.getFormattedDates(reservation.date_time_start);
+                reservation.date_time_end = ReservationController.getFormattedDates(reservation.date_time_end);
             });
 
-            res.status(200).json([reservations]);
+            res.status(200).json(reservations);
             
         } catch (error) {
             console.log(error);

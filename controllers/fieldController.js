@@ -1,7 +1,17 @@
 const { validationResult } = require('express-validator');
 const Field = require('../models/field.js');
+const moment = require('moment-timezone');
+
 
 class FieldController {
+
+    static getFormattedDates(date) {
+        return moment.tz(`2024-01-30 ${date}`, 'Europe/Madrid').format('HH:mm:ss');
+    }
+
+    static transformToUTC(date) {
+        return new Date(moment.utc(`2024-01-30 ${date}`).format('HH:mm:ss'))
+    }
 
     static async getAllFields(req, res) {
 
@@ -14,8 +24,9 @@ class FieldController {
             let fields = await Field.getAllFields();
             fields.forEach(field => {
                 field.public = field.public === 1 ? true : false;
-                field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-                field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+                
+                field.opening_time = FieldController.getFormattedDates(field.opening_time);
+                field.closing_time = FieldController.getFormattedDates(field.closing_time);
             });
             res.status(200).json(fields);
         } catch (error) {
@@ -34,8 +45,8 @@ class FieldController {
         try {
             let field = req.body;
 
-            field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-            field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            field.opening_time = FieldController.transformToUTC(field.opening_time);
+            field.closing_time = FieldController.transformToUTC(field.closing_time);
 
             const fieldId = await Field.createField(field);
             const createdField = {id: fieldId, ...field};
@@ -60,8 +71,8 @@ class FieldController {
             const fields = await Field.getCompanyFields(company_id);
 
             fields.map(field => {
-                field.date_time_start = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-                field.date_time_end = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+                field.opening_time = FieldController.getFormattedDates(field.opening_time);
+                field.closing_time = FieldController.getFormattedDates(field.closing_time);
             });
 
             res.status(200).json(fields);
@@ -84,8 +95,8 @@ class FieldController {
         try {
             const field = await Field.getFieldById(id);
 
-            field.opening_time = field.opening_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
-            field.closing_time = field.closing_time.toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+            field.opening_time = FieldController.getFormattedDates(field.opening_time);
+            field.closing_time = FieldController.getFormattedDates(field.closing_time);
 
             res.status(200).json(field);
             

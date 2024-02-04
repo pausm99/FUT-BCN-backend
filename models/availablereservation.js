@@ -13,7 +13,7 @@ class AvailableReservation {
 
     try {
       let sql = `
-      INSERT INTO availablereservations (field_id, date_time_start, date_time_end, price)
+      INSERT INTO available_reservations (field_id, date_time_start, date_time_end, price)
       VALUES (?, ?, ?, ?);
       `;
 
@@ -80,6 +80,25 @@ class AvailableReservation {
       throw error;
     }
   }
+
+  static async getAllTypeByFieldId(field_id) {
+    try {
+      
+      let sql = `
+      SELECT date_time_start, date_time_end FROM available_reservations WHERE field_id = ?
+      UNION
+      SELECT date_time_start, date_time_end FROM reservations WHERE field_id = ?;      
+      `;
+
+      const [result] = await db.execute(sql, [field_id, field_id]);
+
+      return result;
+      
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
 
 module.exports = AvailableReservation;
