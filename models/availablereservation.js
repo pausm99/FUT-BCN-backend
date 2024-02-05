@@ -81,16 +81,25 @@ class AvailableReservation {
     }
   }
 
-  static async getAllTypeByFieldId(field_id) {
+  static async getAllTypeByFieldIdAndRange(field_id, start, end) {
     try {
       
       let sql = `
-      SELECT date_time_start, date_time_end FROM available_reservations WHERE field_id = ?
+      SELECT 'available' as type, field_id, date_time_start, date_time_end, price
+      FROM available_reservations
+      WHERE available_reservations.field_id = ?
+        AND available_reservations.date_time_start BETWEEN ? AND ?
+
       UNION
-      SELECT date_time_start, date_time_end FROM reservations WHERE field_id = ?;      
+
+      SELECT 'occupied' as type, field_id, date_time_start, date_time_end, amount
+      FROM reservations
+      WHERE reservations.field_id = ?
+      AND reservations.date_time_start BETWEEN ? AND ?;
+
       `;
 
-      const [result] = await db.execute(sql, [field_id, field_id]);
+      const [result] = await db.execute(sql, [field_id, start, end, field_id, start, end]);
 
       return result;
       

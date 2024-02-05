@@ -88,9 +88,15 @@ class AvailableReservationController {
 
         const fieldId = req.params.id;
 
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const queryParams = parsedUrl.searchParams;
+
+        let start = queryParams.get('start');
+        let end = queryParams.get('end');
+
         try {
-            const allReservations = await AvailableReservation.getAllTypeByFieldId(fieldId);
-            
+            const allReservations = await AvailableReservation.getAllTypeByFieldIdAndRange(fieldId, start, end);
+
             allReservations.map(res => {
                 res.date_time_start = AvailableReservationController.getFormattedDates(res.date_time_start);
                 res.date_time_end = AvailableReservationController.getFormattedDates(res.date_time_end);
