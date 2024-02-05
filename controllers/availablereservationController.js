@@ -131,6 +131,26 @@ class AvailableReservationController {
             res.status(500).json({  error: 'Server Error' });
         }
     }
+
+    static async deleteAvailableReservation(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        try {
+
+            const id = req.params.id;
+
+            await AvailableReservation.deleteAvailableReservationById(id);
+
+            res.status(200).json({ message: 'Available reservation deleted' });
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
 }
 
 module.exports = AvailableReservationController;

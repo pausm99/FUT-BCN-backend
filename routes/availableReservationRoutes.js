@@ -9,6 +9,8 @@ router.route('/occupied/:id').get(authMiddleware.authenticateToken, availableres
 router.route('/').post(authMiddleware.authenticateToken, availablereservationController.createAvailableReservation);
 router.route('/bulk').post(authMiddleware.authenticateToken, availablereservationController.createBulkAvailableReservations);
 
+router.route('/:id').delete(authMiddleware.authenticateToken, availablereservationController.deleteAvailableReservation);
+
 
 
 module.exports = router;
