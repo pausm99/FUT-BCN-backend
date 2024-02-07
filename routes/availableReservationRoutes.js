@@ -11,6 +11,7 @@ router.route('/bulk').post(authMiddleware.authenticateToken, availablereservatio
 
 router.route('/:id').delete(authMiddleware.authenticateToken, availablereservationController.deleteAvailableReservation);
 
+router.route('/state/:id').patch(authMiddleware.authenticateToken, availablereservationController.changeAvailableReservationState);
 
 
 module.exports = router;

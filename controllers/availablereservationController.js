@@ -157,6 +157,34 @@ class AvailableReservationController {
             res.status(500).json({  error: 'Server Error' });
         }
     }
+
+    static async changeAvailableReservationState(req, res) {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+
+            const id = req.params.id;
+            let state = req.body.state;
+
+            if (state) {
+                setTimeout(async () => {
+                    await AvailableReservation.changeAvailableReservationState(id, false);
+                }, 300000);
+            }
+
+            await AvailableReservation.changeAvailableReservationState(id, state);
+
+            res.status(200).json({ message: 'Changed available reservation state' });
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
 }
 
 module.exports = AvailableReservationController;
