@@ -185,6 +185,36 @@ class AvailableReservationController {
             res.status(500).json({  error: 'Server Error' });
         }
     }
+
+    static async getAvailableReservationsByRange(req, res) {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const queryParams = parsedUrl.searchParams;
+
+        let start = new Date(queryParams.get('start')).toISOString();
+        let end = new Date(queryParams.get('end')).toISOString();
+
+        try {
+            const avReservations = await AvailableReservation.getAvailableReseservationsByRange(start, end);
+
+            avReservations.map(res => {
+                res.date_time_start = AvailableReservationController.getFormattedDates(res.date_time_start);
+                res.date_time_end = AvailableReservationController.getFormattedDates(res.date_time_end);
+            });
+
+            res.status(200).json(avReservations);
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+
+    }
 }
 
 module.exports = AvailableReservationController;

@@ -2,21 +2,20 @@ const db = require("../config/db");
 
 class AvailableReservation {
   
-  constructor(field_id, date_time_start, date_time_end, price, state) {
+  constructor(field_id, date_time_start, date_time_end, price, blocked) {
     this.field_id = field_id;
     this.date_time_start = date_time_start;
     this.date_time_end = date_time_end;
     this.price = price;
-    this.state = state
+    this.blocked = blocked
   }
 
   static async createAvailableReservation(availablereservation) {
 
-    console.log(availablereservation)
 
     try {
       let sql = `
-      INSERT INTO available_reservations (field_id, date_time_start, date_time_end, price, state)
+      INSERT INTO available_reservations (field_id, date_time_start, date_time_end, price, blocked)
       VALUES (?, ?, ?, ?, ?);
       `;
 
@@ -25,7 +24,7 @@ class AvailableReservation {
         availablereservation.date_time_start,
         availablereservation.date_time_end,
         availablereservation.price,
-        availablereservation.state,
+        availablereservation.blocked,
       ]);
 
       return result.insertId;
@@ -112,7 +111,7 @@ class AvailableReservation {
     }
   }
 
-  static async changeAvailableReservationState(id, state) {
+  static async changeAvailableReservationState(id, blocked) {
     try {
       let sql = `
         UPDATE available_reservations
@@ -120,8 +119,27 @@ class AvailableReservation {
         WHERE id = ?;
       `;
   
-      return await db.execute(sql, [state, id]);
+      return await db.execute(sql, [blocked, id]);
       
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getAvailableReseservationsByRange(start, end) {
+    try {
+      let sql = `
+        SELECT t1.*, t2.name AS field_name, t2.type AS field_type
+        FROM available_reservations t1
+        JOIN football_fields t2
+        ON t1.field_id = t2.id
+        WHERE date_time_start BETWEEN ? AND ?;
+      `;
+
+      const [result] = await db.execute(sql, [start, end]);
+
+      return result;
+
     } catch (error) {
       throw error;
     }
