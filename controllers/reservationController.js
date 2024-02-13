@@ -117,7 +117,6 @@ class ReservationController {
         try {
             
             const reservations = await Reservation.getReservationsByUserId(userId);
-            console.log(reservations);
 
             reservations.map(reservation => {
                 reservation.date_time_start = ReservationController.getFormattedDates(reservation.date_time_start);
