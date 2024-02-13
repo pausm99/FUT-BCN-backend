@@ -105,6 +105,32 @@ class ReservationController {
             res.status(500).json({  error: 'Server Error' });
         }
     }
+
+    static async getReservationsByUserId(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const userId = req.params.id;
+
+        try {
+            
+            const reservations = await Reservation.getReservationsByUserId(userId);
+            console.log(reservations);
+
+            reservations.map(reservation => {
+                reservation.date_time_start = ReservationController.getFormattedDates(reservation.date_time_start);
+                reservation.date_time_end = ReservationController.getFormattedDates(reservation.date_time_end);
+            });
+
+            res.status(200).json(reservations);
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Server Error' });
+        }
+    }
 }
 
 module.exports = ReservationController;

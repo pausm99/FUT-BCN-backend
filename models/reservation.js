@@ -36,21 +36,6 @@ class Reservation {
     }
   }
 
-//   static async getAllReservations() {
-//     try {
-//       let sql = `
-//       SELECT * FROM reservations;
-//       `
-
-//       const [result] = await db.execute(sql);
-
-//       return result;
-      
-//     } catch (error) {
-//       throw error
-//     }
-//   }
-
   static async getReservationById(id) {
     try {
       
@@ -68,21 +53,22 @@ class Reservation {
     }
   }
 
-//   static async getCompanyReservations(company_id) {
-//     try {
+  static async getReservationsByUserId(id) {
+    try {
       
-//       let sql = `
-//       SELECT * FROM reservations
-//       WHERE company_id = ?;
-//       `
+      let sql = `
+      SELECT * FROM reservations
+      WHERE user_id = ?;
+      `;
 
-//       const [result] = await db.execute(sql, [company_id]);
+      const [result] = await db.execute(sql, [id]);
 
-//       return result;
-//     } catch (error) {
-//       throw error
-//     }
-//   }
+      return result;
+
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async deleteReservationById(id) {
     try {
