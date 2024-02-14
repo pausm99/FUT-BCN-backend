@@ -3,7 +3,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const Field = require('../models/field');
 
 function authenticateCompanyToken(req, res, next) {
-    const token = req.header('Authorization')?.split(' ')[1];
+    const token = req.cookies.refreshToken;
 
     if (!token) {
         return res.status(401).json({ errror: 'Unauthorized' });
@@ -26,7 +26,7 @@ function authenticateCompanyToken(req, res, next) {
 }
 
 async function authenticateCompanyTokenWhenDeleteField(req, res, next) {
-    const token = req.header('Authorization')?.split(' ')[1];
+    const token = req.cookies.refreshToken;
 
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized' });

@@ -69,16 +69,27 @@ class UserController {
 
             // Generate acces token
             const token = jwt.sign({ userSimple }, SECRET_KEY, {
-                expiresIn: '1d',
+                expiresIn: '7d',
             });
 
             // Respond with token
+            res.cookie('refreshToken', token, { 
+                maxAge: 604800000,
+                path: '/',
+                secure: false,
+                //secure: true, CANVIAR QUAN SIGUI HTTPS
+            });
             res.status(200).header('Authorization', `Bearer ${token}`).json({ message: 'User logged successfully'});
 
         } catch (err) {
             console.log(err);
             res.status(500).json({  error: 'Server Error' });
         }
+    }
+
+    static async logout(req, res) {
+        res.clearCookie('refreshToken');
+        res.send({ message: 'User logged out' });
     }
 
     static async getUserByEmail(req, res) {

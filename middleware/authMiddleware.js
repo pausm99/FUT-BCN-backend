@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 function authenticateToken(req, res, next) {
-    const token = req.header('Authorization')?.split(' ')[1];
+    const token = req.cookies.refreshToken;
 
     if (!token) {
         return res.status(401).json({ errror: 'Unauthorized' });
