@@ -18,7 +18,7 @@ class UserController {
 
         try {
             const existingUser = await User.getUserByEmail(email);
-            console.log('Duplicated user:', existingUser);
+
             if (existingUser) {
                 return res.status(400).json({ error: 'User already exists' });
             }
