@@ -10,8 +10,16 @@ class FieldController {
     }
 
     static transformToUTC(date) {
-        return new Date(moment.utc(`2024-01-30 ${date}`).format('HH:mm:ss'))
+        try {
+            const utcString = `2024-01-30 ${date}`;
+            const utcMoment = moment.utc(utcString, 'YYYY-MM-DD HH:mm:ss');
+            return new Date(utcMoment.format());
+        } catch (error) {
+            console.error('Error transforming to UTC:', error);
+            return null;
+        }
     }
+    
 
     static async getAllFields(req, res) {
 
