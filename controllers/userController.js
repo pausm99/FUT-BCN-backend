@@ -73,11 +73,12 @@ class UserController {
             });
 
             // Respond with token
-            res.cookie('refreshToken', token, { 
+            res.cookie('refreshToken', token, {
+                httpOnly: true, 
                 maxAge: 604800000,
                 path: '/',
                 secure: false,
-                //secure: true, CANVIAR QUAN SIGUI HTTPS
+                //secure: true, CHANGE WHEN HTTPS
             });
             res.status(200).header('Authorization', `Bearer ${token}`).json({ message: 'User logged successfully'});
 
