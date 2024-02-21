@@ -102,11 +102,15 @@ class FieldController {
 
         try {
             const field = await Field.getFieldById(id);
+            
+            if (field) {
 
-            field.opening_time = FieldController.getFormattedDates(field.opening_time);
-            field.closing_time = FieldController.getFormattedDates(field.closing_time);
+                field.opening_time = FieldController.getFormattedDates(field.opening_time);
+                field.closing_time = FieldController.getFormattedDates(field.closing_time);
+    
+                res.status(200).json(field);
+            } else res.status(404).json({ error: 'Not found' })
 
-            res.status(200).json(field);
             
         } catch (error) {
             console.log(error);
