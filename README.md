@@ -1,6 +1,6 @@
 # Backend for FUT-BCN
 
-This repository contains the backend code for the FUT-BCN project, implemented in Node.js using Express.
+This repository contains the backend code for the [FUT-BCN](https://github.com/pausm99/FUT-BCN) project, implemented in Node.js using Express.
 
 ## Overview
 
