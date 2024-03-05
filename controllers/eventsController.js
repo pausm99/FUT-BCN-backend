@@ -12,6 +12,28 @@ class EventController {
         return moment.tz(date, 'Europe/Madrid').format();
     }
 
+    static async createEvent(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            let event = req.body;
+
+            event.date_time_start = EventController.transformToUTC(event.date_time_start);
+            event.date_time_end = EventController.transformToUTC(event.date_time_end);
+
+            const eventId = await Event.createEvent(event);
+            const createdEvent = {id: eventId, ...event};
+            res.status(200).json(createdEvent);
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({  error: 'Server Error' });
+        }
+    }
+
     static async getEventById(req, res) {
 
         const errors = validationResult(req);
