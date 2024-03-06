@@ -5,7 +5,9 @@ const router = express.Router();
 
 
 router.route('/:id').get(authMiddleware.authenticateToken, eventController.getEventById);
-router.route('/').post(authMiddleware.authenticateToken, eventController.createEvent)
+router.route('/').get(authMiddleware.authenticateToken, eventController.getAllEvents);
+
+router.route('/').post(authMiddleware.authenticateToken, eventController.createEvent);
 
 
 module.exports = router;

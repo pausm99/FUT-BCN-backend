@@ -49,10 +49,10 @@ class EventController {
 
             if (event) {
 
-                Event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
-                Event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
+                event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
+                event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
     
-                res.status(200).json(Event);
+                res.status(200).json(event);
                 
             } else res.status(404).json({ error: 'Not found' })
             
@@ -60,6 +60,27 @@ class EventController {
             console.log(error);
             res.status(500).json({  error: 'Server Error' });
         }
+    }
+
+    static async getAllEvents(req, res) {
+        const today = new Date();
+
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 30);
+
+        const todayString = EventController.transformToUTC(today);
+        const nextWeekString = EventController.transformToUTC(nextWeek);
+
+        try {
+            const events = await Event.getEventsByTimeRange(todayString, nextWeekString);
+
+            res.status(200).json(events);
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Server Error' });
+        }
+        
     }
 
 }
