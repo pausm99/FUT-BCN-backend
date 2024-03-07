@@ -59,8 +59,12 @@ class Event {
     try {
         
         let sql = `
-        SELECT * FROM events
-        WHERE id = ?
+        SELECT e.*, f.name AS field_name, f.type AS field_type, u.name AS user_name, f.address FROM events e
+        JOIN football_fields f
+        ON e.field_id = f.id
+        JOIN users u
+        ON e.user_id = u.id
+        WHERE e.id = ?
         `;
 
         const [result] = await db.execute(sql, [id]);
