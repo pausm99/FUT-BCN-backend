@@ -49,8 +49,8 @@ class EventController {
 
             if (event) {
 
-                event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
-                event.date_time_start = EventController.getFormattedDates(Event.date_time_start);
+                event.date_time_start = EventController.getFormattedDates(event.date_time_start);
+                event.date_time_end = EventController.getFormattedDates(event.date_time_end);
     
                 res.status(200).json(event);
                 
