@@ -36,17 +36,16 @@ class Event {
     }
   }
 
-  static async getEventsByTimeRange(start, end) {
+  static async getEventsByTimeRange(start) {
     try {
       
       let sql = `
       SELECT e.*, f.name AS field_name FROM events e JOIN football_fields f
       ON e.field_id = f.id
-      WHERE date_time_start > ?
-      AND date_time_start < ?;
+      WHERE date_time_start > ?;
       `;
 
-      const [result] = await db.execute(sql, [start, end]);
+      const [result] = await db.execute(sql, [start]);
 
       return result;
 

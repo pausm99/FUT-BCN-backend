@@ -65,14 +65,10 @@ class EventController {
     static async getAllEvents(req, res) {
         const today = new Date();
 
-        const nextWeek = new Date();
-        nextWeek.setDate(nextWeek.getDate() + 30);
-
         const todayString = EventController.transformToUTC(today);
-        const nextWeekString = EventController.transformToUTC(nextWeek);
 
         try {
-            const events = await Event.getEventsByTimeRange(todayString, nextWeekString);
+            const events = await Event.getEventsByTimeRange(todayString);
 
             res.status(200).json(events);
 
