@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 class Event {
   
-  constructor(name, reservation_id, field_id, user_id, date_time_start, date_time_end, incomplete) {
+  constructor(name, reservation_id, field_id, user_id, date_time_start, date_time_end, incomplete, max_players) {
     this.name = name;
     this.reservation_id = reservation_id;
     this.field_id = field_id;
@@ -10,13 +10,14 @@ class Event {
     this.date_time_start = date_time_start;
     this.date_time_end = date_time_end;
     this.incomplete = incomplete;
+    this.max_players = max_players;
   }
 
   static async createEvent(event) {
     try {
         let sql = `
-        INSERT INTO events(name, reservation_id, field_id, user_id, date_time_start, date_time_end, incomplete)
-        VALUES (?, ?, ?, ?, ?, ?, ?); 
+        INSERT INTO events(name, reservation_id, field_id, user_id, date_time_start, date_time_end, incomplete, max_players)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?); 
         `;
 
         const [result] = await db.execute(sql, [
@@ -26,7 +27,8 @@ class Event {
             event.user_id,
             event.date_time_start,
             event.date_time_end,
-            event.incomplete
+            event.incomplete,
+            event.max_players || null
         ]);
 
         return result.insertId;
@@ -74,6 +76,44 @@ class Event {
     } catch (error) {
         console.log(error)
         throw error;
+    }
+  }
+
+  static async getNPlayersEnrolledToEvent(event_id, user_id) {
+    try {
+      
+      let sql = `
+        SELECT 
+          COUNT(*) AS player_count,
+          MAX(CASE WHEN user_id = ? THEN 1 ELSE 0 END) AS user_exists
+        FROM event_users
+        WHERE event_id = ?;
+      `;
+
+      const [result] = await db.execute(sql, [user_id, event_id]);
+
+      return result[0];
+
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
+  static async joinEvent(event_id, user_id) {
+    let sql = `
+      INSERT INTO event_users (user_id, event_id)
+      VALUES (?, ?);
+    `;
+
+    try {
+
+      await db.execute(sql, [user_id, event_id]);
+      return;
+
+    } catch (error) {
+      console.log(error)
+      throw error;
     }
   }
 

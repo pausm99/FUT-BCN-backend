@@ -79,6 +79,46 @@ class EventController {
         
     }
 
+    static async getNumberOfPlayersEnrolledToEvent(req, res) {
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const id = req.query.event_id;
+        const user_id = req.query.user_id;
+
+        try {
+            const players = await Event.getNPlayersEnrolledToEvent(id, user_id);
+
+            res.status(200).json(players);
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Server Error' });
+        }
+    }
+
+    static async joinEvent(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const event_id = req.params.id;
+        const user_id = req.body.user_id;
+
+        try {
+            await Event.joinEvent(event_id, user_id);
+
+            res.status(200).json({ message: 'Joined event successfully' });
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Server Error' });
+        }
+    }
+
 }
 
 module.exports = EventController;
