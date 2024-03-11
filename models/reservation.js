@@ -58,7 +58,8 @@ class Reservation {
       
       let sql = `
       SELECT * FROM reservations
-      WHERE user_id = ?;
+      WHERE user_id = ?
+      AND amount IS NOT NULL;
       `;
 
       const [result] = await db.execute(sql, [id]);
