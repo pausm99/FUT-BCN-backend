@@ -119,6 +119,25 @@ class EventController {
         }
     }
 
+    static async unEnrollEvent(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const event_id = req.params.id;
+        const user_id = req.query.user_id;
+
+        try {
+            await Event.unEnrollEvent(event_id, user_id);
+
+            res.status(200).json({ message: 'Unenrolled from event successfully' });
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Server Error' });
+        }
+    }
+
 }
 
 module.exports = EventController;

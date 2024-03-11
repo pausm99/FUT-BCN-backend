@@ -12,5 +12,7 @@ router.route('/').post(authMiddleware.authenticateToken, eventController.createE
 
 router.route('/join/:id').post(authMiddleware.authenticateToken, eventController.joinEvent);
 
+router.route('/unenroll/:id').delete(authMiddleware.authenticateToken, eventController.unEnrollEvent);
+
 
 module.exports = router;

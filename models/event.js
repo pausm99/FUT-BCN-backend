@@ -117,6 +117,23 @@ class Event {
     }
   }
 
+  static async unEnrollEvent(event_id, user_id) {
+    let sql = `
+      DELETE FROM event_users
+      WHERE event_id = ? AND user_id = ?;
+    `;
+
+    try {
+
+      await db.execute(sql, [event_id, user_id]);
+      return;
+
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
+
 }
 
 module.exports = Event;
